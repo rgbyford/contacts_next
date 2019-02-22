@@ -3,12 +3,59 @@ import Head from 'next/head';
 import PropTypes from 'prop-types';
 import { getList } from '../lib/api/public';
 import withLayout from '../lib/withLayout';
-import openSocket from 'socket.io-client';
+import socketIOClient from 'socket.io-client';
+//import DataTable from 'react-data-table-component';
+import {Table} from 'reactable';
+//var Table = Reactable.Table;
 
 let aoCats = [];
+let timerId;
+//const tableData;
 
+// const columns = [
+//   {
+//     name: 'First Name',
+//     selector: 'givenName',
+//     sortable: true,
+//   },
+//   {
+//     name: 'Last Name',
+//     selector: 'familyName',
+//     sortable: true
+//   }
+// ];
+ 
 module.exports.getCats = function () {
   return (aoCats);
+}
+
+// class MyTable extends React.Component {
+//   render() { 
+//     console.log ("table data: ", this.props.tableData);
+//     return (
+//       <DataTable
+//         title="Near-duplicates"
+//         columns={columns}
+//         data={this.props.tableData}
+//       />
+//     )
+//   }
+// }
+
+class MyTable extends React.Component {
+  render() {
+    return (<Table className = "table"
+      data = {
+        this.props.tableData
+      }
+      />
+      //     [
+      //     { Name: 'Griffin Smith', Age: 18 },
+      //     { Age: 23,  Name: 'Lee Salminen' },
+      //     { Age: 28, Position: 'Developer' },
+      // ]} />
+    );
+  }
 }
 
 class FileInput extends React.Component {
@@ -16,28 +63,54 @@ class FileInput extends React.Component {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.fileInput = React.createRef();
-    this.timeCounter = 0;
+    this.state = {
+      timeCounter: 0,
+      names: [],
+      response: false
+    }
   }
 
-  handleTick () {
-    timeCounter++;
-    setState ({timeCounter: this.timeCounter});
+  componentDidMount() {
+    const socket = socketIOClient();
+    socket.on('news', (data) => {
+      console.log ("something received: ", data);
+      let jsonRcvd = JSON.parse (data.something);
+      this.state.names = [];
+      for (let i = 0; i < jsonRcvd.length; i++) {
+        let oName = {};
+        oName.id = i;
+        oName.givenName = jsonRcvd[i].GivenName;
+        oName.familyName = jsonRcvd[i].FamilyName;
+        this.state.names.push(oName);
+      }
+      //this.state.names = JSON.parse (data.something);
+      console.log ("state.names[1]: ", this.state.names[1]);
+      socket.close ();
+      clearInterval (timerId);
+      this.setState({ response: true })
+    });
   }
 
   handleSubmit(event) {
     event.preventDefault();
-//    alert(`Selected file - ${this.fileInput.current.files[0].name}`);
     console.log("load button");
+    console.log ("props: ", this.props);
+    console.log ("state: ", this.state);
     let formData = new FormData();
-
-    formData.append("avatar", event.target.files[0]);
-    formData.append("clearDB", this.bClearDB);
-    formData.append("clearCats", this.bClearCats);
+    let fname = this.fileInput.current.files[0].name;
+    console.log ('fname: ', fname);
+    
+    formData.append("avatar", this.fileInput.current.files[0]);
+    formData.append("clearDB", this.props.bClearDB);
+    formData.append("clearCats", this.props.bClearCats);
+    formData.append("csv", fname.indexOf("csv") > 0 ? 'true' : 'false');
     //initSocket();
-
+    
     timerId = setInterval(() => {
       // function called
-      $("#loading").html(`Loading   ${timeCounter++}`)
+      this.timeCounter++;
+      console.log ("tC: ", this.timeCounter);
+      this.setState ({timeCounter: this.timeCounter});
     }, 1000);
 
     var opts = {
@@ -47,7 +120,7 @@ class FileInput extends React.Component {
     fetch("/contacts/import", opts).then(function (response) {
       return (response.text());
     }).then(function (string) {
-      // console.log("res: ", string);
+      console.log("res: ", string);
       //        $("body").html(string);
       //location.reload(); // essential to refresh the page
     });
@@ -58,11 +131,15 @@ class FileInput extends React.Component {
       <form onSubmit={this.handleSubmit}>
         <label>
           Upload file:
-          <input style={{width: "100%"}} type="file" ref={this.fileInput} />
+          <input style={{width: "100%"}} accept=".csv, .CSV, .vcf, .VCF" type="file" ref={this.fileInput} />
         </label>
         <br /><br />
         <button type="submit">Submit</button>
-        <p>Loading {this.timeCounter}</p>
+        <div>
+        {this.state.response
+          ? <div><p>Loading done.</p><MyTable tableData={this.state.names} /></div>
+          : <p>Loading {this.state.timeCounter}</p>
+        }</div>
       </form>
     );
   }
@@ -132,7 +209,7 @@ class LoadPage extends React.Component {
          </label>
          <br /><br />
         </form>
-        <FileInput />
+        <FileInput bClearDB={this.state.bClearDB} bClearCats={this.state.bClearCats} />
         </div>
     );
   }

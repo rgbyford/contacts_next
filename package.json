@@ -23,8 +23,14 @@
     "papaparse": "^4.6.3",
     "prop-types": "^15.6.1",
     "react": "^16.2.0",
+    "react-data-table-component": "^1.4.0",
     "react-dom": "^16.2.0",
     "react-jss": "^8.2.1",
-    "socket.io-client": "^2.2.0"
+    "reactable": "^1.1.0",
+    "socket.io": "^2.2.0",
+    "socket.io-client": "^2.2.0",
+    "styled-components": "^4.1.3",
+    "util": "^0.11.1",
+    "vcard": "^0.1.0"
   }
 }

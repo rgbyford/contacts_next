@@ -6,6 +6,7 @@ let dbToby;
 const url = "mongodb://localhost:27017";
 const routes = require("../routes/routes");
 const dbFns = require('./database');
+const appFns = require ('../app.js');
 
 // Connect using MongoClient
 MongoClient.connect(url, function (err, client) {
@@ -65,7 +66,7 @@ module.exports.queryDB = async function (asSearchAnd, asSearchOr) {
             $in: asSearchOr
         }
     }
-    return new Promise(async (resolve, reject) => {
+    return Promise(async (resolve, reject) => {
         console.log (`typeof asSearchOr: ${typeof (asSearchOr)} length: ${asSearchOr.length} |${asSearchOr}|`);
         if (asSearchOr.length === 0) {
             // generates an error
@@ -118,7 +119,7 @@ module.exports.queryDB = async function (asSearchAnd, asSearchOr) {
 let iRowsCBCount = 0;
 let dbStuff = require("./database.js");
 let oContactSaved;
-let aoModified = [];
+let aoModified = [{}];
 let bLast;
 let iRowsResultBad;
 //let iModified = 0;;
@@ -143,7 +144,7 @@ module.exports.getLoaded = function () {
 };
 
 module.exports.prepLoad = function () {
-    dbFns.clearContacts();
+//    dbFns.clearContacts();
     iRowsCBCount = 0;
     //iModified = 0;
     aoModified.length = 0;
@@ -159,7 +160,11 @@ function insertContactCallback(err, res) {
         if (res.result.nModified > 0) {
             console.log(`nM > 0: ${iRowsCBCount}: ${res.result.n} ${res.result.nModified} ${res.result.ok}`);
             console.log(`${oContactSaved.GivenName} ${oContactSaved.FamilyName}`);
-            aoModified.push(oContactSaved);
+//            aoModified.push(oContactSaved);
+            let oMod = {};
+            oMod.GivenName = oContactSaved.GivenName;
+            oMod.FamilyName = oContactSaved.FamilyName;
+            aoModified.push(oMod);
             //iModified++;
         }
         if (res.result.n !== 1) {
@@ -185,8 +190,9 @@ function insertContactCallback(err, res) {
         console.log("RowsNBad", iRowsNBad);
         console.log("iRowsResultBad", iRowsResultBad);
         dbStuff.writeFile(); // categories
-//        serverFns.sendSomething();
-        bRenderedContacts = true;
+        aoModified.shift();     // remove first (empty) element
+        appFns.sendSomething(aoModified);
+//        bRenderedContacts = true;
         bLast = false;
     }
     //    console.log ("Rows: ", iSavedCount, iRowsCBCount);

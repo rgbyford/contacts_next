@@ -3,10 +3,12 @@ let papa = require("papaparse");
 var fs = require("fs");
 let index = 0;      // just to count and display the rows
 let fileName;
+let fd;
 
 function CJDone(results) {
     dbStuff.importNames(index);
     console.log(`import done: ${index} rows according to papaparse`);
+    fs.closeSync (fd);
     fs.unlinkSync('./uploads/' + fileName);
     index = 0;
 }
@@ -44,9 +46,13 @@ var myConfig = {
 };
 
 module.exports.csvJson = function (file) {
+    console.log ("csvJson");
+    dbStuff.clearContacts('CSV');
     fileName = file;
     dbStuff.readCatsFile(); // read in existing categories
     // When the file is a local file we need to convert to a file Obj.
-    var content = fs.readFileSync("./uploads/" + file, "utf8");
+    fd = fs.openSync ("./uploads/" + file);
+//    var content = fs.readFileSync("./uploads/" + file, "utf8");
+    var content = fs.readFileSync(fd, "utf8");
     papa.parse(content, myConfig);
 };

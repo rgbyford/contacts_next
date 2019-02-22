@@ -50,7 +50,7 @@ const fs = require("fs");
 let fdCats;
 
 function indexOfByKey(obj_list, key, value) {
-    for (index in obj_list) {
+    for (let index in obj_list) {
         // console.log("iOBK: ", index, obj_list[index][key], value);
         if (obj_list[index][key] === value) return index;
     }
@@ -113,8 +113,12 @@ module.exports.findSubCats = function (sCat) {
     }
 };
 
-module.exports.clearContacts = function () {
+let contactsSource;
+
+module.exports.clearContacts = function (source) {
+    contactsSource = source;
     aoContacts.length = 0;
+    connFns.prepLoad();
 };
 
 module.exports.pushContact = function (oContact) {
@@ -155,7 +159,7 @@ function buildCategories(asTag) {
             //console.log ("sTS: ", req.body.sValue[0], sSearch);            
         }
 
-        sIsSubCatOf = "";
+        let sIsSubCatOf = "";
         for (let j = 0; j < asCatSub.length; j++) { // go through the cats & subCats
             let iCatFound;
             //            if (aoCatsRead.length === 0) {
@@ -181,6 +185,7 @@ let aoContacts = [];
 let iSavedCount;
 
 module.exports.importNames = function (iCount = 0) {
+    //console.log ('aoClength: ', aoContacts.length);
     if (iCount) {
         iSavedCount = iCount;
     }
@@ -191,19 +196,21 @@ module.exports.importNames = function (iCount = 0) {
     }
     var oContact = {};
     const nestedContent = aoContacts[0];
-    Object.keys(nestedContent[0]).forEach(docTitle => {
+    //console.log ('nnn', nestedContent);
+    Object.keys(nestedContent).forEach(docTitle => {
         let givenName;
         let sPropName = docTitle.replace(/ /g, "");
         if (docTitle === "Given Name") {
-            givenName = nestedContent[0][docTitle];
+            givenName = nestedContent[docTitle];
             oContact.GivenName = givenName;
         } else if (docTitle === "Family Name") {
-            oContact.FamilyName = nestedContent[0][docTitle];
+            oContact.FamilyName = nestedContent[docTitle];
         } else if (docTitle === "Group Membership") {
             let asFirstSplit = [];
             let asSecondSplit = [];
-            let sValue = nestedContent[0][docTitle];
-            asFirstSplit = sValue.split(" ::: ");
+            let sValue = nestedContent[docTitle];
+            // VCF file splits tags with ',' - CSV file with ':::'
+            asFirstSplit = sValue.split(contactsSource === 'CSV' ? ' ::: ' : ',');
             for (let i = 0; i < asFirstSplit.length; i++) {
                 let sTemp;
                 //if (asFirstSplit[i][0] === ".") {
@@ -220,7 +227,7 @@ module.exports.importNames = function (iCount = 0) {
                 }
                 asSecondSplit = asSecondSplit.concat(sTemp.split("_"));
                 // replace short names with long
-                for (j = 0; j < asSecondSplit.length; j++) {
+                for (let j = 0; j < asSecondSplit.length; j++) {
                     // replace short category names with long
                     let iTagPos = indexOfByKey(aoTagNames, 'sShortName', asSecondSplit[j]);
                     // console.log ("iTP: ", iTagPos);
@@ -234,10 +241,10 @@ module.exports.importNames = function (iCount = 0) {
             buildCategories(asFirstSplit);
             oContact[sPropName] = arrayUnique(asSecondSplit);
         } else {
-            let value = nestedContent[0][docTitle];
+            let value = nestedContent[docTitle];
             //get rid of %, and the comma after thousands
             value = value.toString().replace(/[%,]/g, "");
-            if (nestedContent[0][docTitle] !== "") {
+            if (nestedContent[docTitle] !== "") {
                 oContact[sPropName] = value;
             }
         }
@@ -245,7 +252,7 @@ module.exports.importNames = function (iCount = 0) {
 
     // now put it into the database
     aoContacts.shift(); // remove the one used
-    //console.log ("aoC length: ", aoContacts.length);
+//    console.log ("aoC length: ", aoContacts.length);
     connFns.insertContact(oContact, aoContacts.length === 0); // iCount 0 except for first call
     iRows++;
     return;

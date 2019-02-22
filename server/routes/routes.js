@@ -1,13 +1,54 @@
 let express = require("express");
 let router = express.Router();
 const cjFns = require("../models/csvjson.js");
+const vcfFns = require('../models/vcfjson.js');
 const dbFunctions = require("../models/database.js");
 const dbConn = require("../models/connection.js");
+const socketIo = require("socket.io");
+
 let aoCats = [{}];
 let asPrev = [];
 let iAnds = -1;
 let bAndBtnDisabled = false;
 let bClearedDB = false;
+var multer = require("multer");
+var uploadMulter = multer({
+    dest: "./uploads/"
+});
+
+// I don"t know if the "avatar" here has to match what is in the put
+router.put("/contacts/import", uploadMulter.single("avatar"), async function (req, res, next) {
+    //req.file.filename gives the file name on the server
+    // req.file.originalname gives the client file name
+    // console.log("body: ", req.body);
+    //    document.body.style.cursor  = 'wait';
+    // console.log ("res render import");
+    // res.render("loadcontacts", {
+    //     loading: true
+    // });
+    // open a socket
+    //const io = socketIo();
+
+    bClearedDB = false;
+    console.log("/contacts/import req body: ", req.body);
+    if (req.body.clearDB === 'true') {
+        await dbConn.clearDB();
+        bClearedDB = true;
+        // empty the database collection
+    }
+    if (req.body.clearCats === 'true') {
+        dbFunctions.deleteCatsFile();
+        // erase the categories file
+    }
+    let fname = req.file.filename.toLowerCase();
+    console.log ("file name: ", fname);
+    if (req.body.csv === 'true') {
+        cjFns.csvJson(fname);
+    }
+    else {
+        vcfFns.vcfJson (fname);
+    }
+});
 
 router.get('/categories', async (req, res) => {
     console.log("server get cats");
