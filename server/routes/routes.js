@@ -30,7 +30,7 @@ router.put("/contacts/import", uploadMulter.single("avatar"), async function (re
     //const io = socketIo();
 
     bClearedDB = false;
-    console.log("/contacts/import req body: ", req.body);
+    //console.log("/contacts/import req body: ", req.body);
     if (req.body.clearDB === 'true') {
         await dbConn.clearDB();
         bClearedDB = true;
@@ -72,7 +72,7 @@ router.post("/contacts", async function (req, res) {
     let asSearchAnd = [];
     let asSearchOr = [];
 
-    console.log("search body: ", req.body);
+    //console.log("search body: ", req.body);
     for (let i = 0; i < req.body.search.length; i++) {
         let sFind = req.body.search[i];
         console.log("sFind: ", sFind);

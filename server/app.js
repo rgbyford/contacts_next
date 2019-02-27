@@ -42,7 +42,7 @@ nextApp.prepare().then(() => {
   //console.log("serve static: ", path.join(__dirname, 'public'));
   app.use(serveStatic(path.join(__dirname, 'public')));
   app.get('*', (req, res) => {
-    //console.log ("get something");
+//    console.log ("get something", req);
     return nextHandler(req, res)
   });
 
@@ -58,7 +58,7 @@ nextApp.prepare().then(() => {
   // });
 
   socketServer.listen ('8000', () => {
-    console.log ('socket listening on port 3000');
+    console.log ('socket listening on port 8000');
   })
 
 
