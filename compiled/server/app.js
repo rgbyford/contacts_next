@@ -1,12 +1,6 @@
 'use strict';
 
-var _list = require('./list');
-
-var _list2 = _interopRequireDefault(_list);
-
 var _database = require('./models/database');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var express = require('express');
 var app = express();
@@ -17,6 +11,7 @@ var next = require('next');
 var routes = require("./routes/routes.js");
 var path = require("path");
 var serveStatic = require("serve-static");
+//import list from './list';
 
 
 // var util = require('util');

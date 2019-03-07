@@ -130,7 +130,7 @@ router.post("/contacts", async function (req, res) {
     // end for each asPrev.  Go around, 
 
     //console.log("/contacts/search: ", asSearchAnd, asSearchOr);
-    dbConn.queryDB(asSearchAnd, asSearchOr).then(function (aoFound) {
+    await dbConn.queryDB(asSearchAnd, asSearchOr).then(function (aoFound) {
         // mongo returns an extra null element on the end of the array
         // don't ask why howMany is done in such a weird way
         // handlebars wasn't coping with an extra variable
@@ -166,6 +166,9 @@ router.post("/contacts", async function (req, res) {
         res.json({
             aoFound
         }); // and sends it
+    })
+    .catch (function (err) {
+        console.log (`queryDB error ${err}`);
     });
 
     return;

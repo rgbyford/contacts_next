@@ -2,11 +2,12 @@
   "name": "tutorial-3-end",
   "version": "0.0.1",
   "license": "MIT",
+  "homepage": "/cnext",
   "scripts": {
     "build": "npm run build:next && npm run build:server",
     "build:next": "next build",
     "build:server": "babel server -d compiled/server",
-    "start": "node compiled/server/app.js",
+    "start": "next start",
     "dev": "nodemon server/app.js --watch server --exec babel-node",
     "now": "now && now alias",
     "rm": "now rm tutorial-3-end --safe --yes"
@@ -18,7 +19,7 @@
     "isomorphic-fetch": "^2.2.1",
     "material-ui": "1.0.0-beta.38",
     "multer": "^1.4.1",
-    "next": "^5.0.0",
+    "next": "^5.1.0",
     "node-fetch": "^2.3.0",
     "papaparse": "^4.6.3",
     "prop-types": "^15.6.1",

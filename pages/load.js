@@ -10,37 +10,10 @@ import {Table} from 'reactable';
 
 let aoCats = [];
 let timerId;
-//const tableData;
-
-// const columns = [
-//   {
-//     name: 'First Name',
-//     selector: 'givenName',
-//     sortable: true,
-//   },
-//   {
-//     name: 'Last Name',
-//     selector: 'familyName',
-//     sortable: true
-//   }
-// ];
  
 module.exports.getCats = function () {
   return (aoCats);
 }
-
-// class MyTable extends React.Component {
-//   render() { 
-//     console.log ("table data: ", this.props.tableData);
-//     return (
-//       <DataTable
-//         title="Near-duplicates"
-//         columns={columns}
-//         data={this.props.tableData}
-//       />
-//     )
-//   }
-// }
 
 class MyTable extends React.Component {
   render() {
@@ -49,11 +22,6 @@ class MyTable extends React.Component {
         this.props.tableData
       }
       />
-      //     [
-      //     { Name: 'Griffin Smith', Age: 18 },
-      //     { Age: 23,  Name: 'Lee Salminen' },
-      //     { Age: 28, Position: 'Developer' },
-      // ]} />
     );
   }
 }

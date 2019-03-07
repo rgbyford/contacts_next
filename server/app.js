@@ -7,7 +7,7 @@ const next = require ('next');
 const routes = require("./routes/routes.js");
 const path = require("path");
 const serveStatic = require("serve-static");
-import list from './list';
+//import list from './list';
 import {
   readCatsFile
 } from './models/database';

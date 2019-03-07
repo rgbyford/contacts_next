@@ -46,7 +46,7 @@ var myConfig = {
 };
 
 module.exports.csvJson = function (file) {
-    console.log ("csvJson");
+    console.log ("csvJson file:", file);
     dbStuff.clearContacts('CSV');
     fileName = file;
     dbStuff.readCatsFile(); // read in existing categories

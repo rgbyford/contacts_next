@@ -16,6 +16,8 @@ MongoClient.connect(url, function (err, client) {
     dbToby = client.db(dbName);
     dbToby.stats().then(function (res) {
         console.log("Connected to database: ", res);
+    }).catch (function (err) {
+        console.log (`Mongo connect error: ${err}`);
     });
 });
 
@@ -66,7 +68,7 @@ module.exports.queryDB = async function (asSearchAnd, asSearchOr) {
             $in: asSearchOr
         }
     }
-    return Promise(async (resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         console.log (`typeof asSearchOr: ${typeof (asSearchOr)} length: ${asSearchOr.length} |${asSearchOr}|`);
         if (asSearchOr.length === 0) {
             // generates an error
