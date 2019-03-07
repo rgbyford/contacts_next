@@ -163,7 +163,10 @@ class CSRWithData extends React.Component {
       {this.sCat.length < 2 ? <button onClick={(e) => this.nextButton(e)}>Next</button> : ""}
       {this.sCat.length ? <button onClick={this.andButton}>AND</button> : ""}
       <button onClick={this.searchButton}>Search</button>
-      {aoFoundPeople.map((x, y) => <p key={y}>{x.GivenName} {x.FamilyName}</p>)}
+      <div>
+      {aoFoundPeople.map((x, y) => <div><p key={y}>{x.GivenName} {x.FamilyName}</p>
+      <img key={y} style={{width: 150}} src={x.Photo1}/></div>)}
+      </div>
     </div>
     );
 }

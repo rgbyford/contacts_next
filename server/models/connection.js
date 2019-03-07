@@ -97,6 +97,7 @@ module.exports.queryDB = async function (asSearchAnd, asSearchOr) {
             GivenName: 1,
             FamilyName: 1,
             GroupMembership: 1,
+            Photo1: 1,
             'Phone1-Value': 1,
             imageURL: 1
         });

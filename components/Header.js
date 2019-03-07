@@ -19,16 +19,6 @@ function Header() {
               Search
             </a>
           </Grid>
-          <Grid item sm={3} xs={4} style={{ textAlign: 'right' }}>
-            <a
-              href="https://builderbook.org/book"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={styleAnchor}
-            >
-              Our book
-            </a>
-          </Grid>
         </Grid>
       </Toolbar>
     </div>
