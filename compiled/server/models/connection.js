@@ -28,6 +28,8 @@ MongoClient.connect(url, function (err, client) {
     dbToby = client.db(dbName);
     dbToby.stats().then(function (res) {
         console.log("Connected to database: ", res);
+    }).catch(function (err) {
+        console.log("Mongo connect error: " + err);
     });
 });
 
@@ -143,7 +145,7 @@ module.exports.queryDB = function () {
                                 $in: asSearchOr
                             }
                         };
-                        return _context4.abrupt("return", Promise(function () {
+                        return _context4.abrupt("return", new Promise(function () {
                             var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee3(resolve, reject) {
                                 var cursor;
                                 return _regenerator2.default.wrap(function _callee3$(_context3) {
@@ -177,6 +179,7 @@ module.exports.queryDB = function () {
                                                     GivenName: 1,
                                                     FamilyName: 1,
                                                     GroupMembership: 1,
+                                                    Photo1: 1,
                                                     'Phone1-Value': 1,
                                                     imageURL: 1
                                                 });

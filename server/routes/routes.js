@@ -65,16 +65,22 @@ router.get('/categories', async (req, res) => {
     }
 });
 
-router.post("/contacts", async function (req, res) {
-    console.log("post contacts");
+router.get("/contacts", async function (req, res) {
+    console.log("get contacts");
     //    setPrevious();
     //    iAnds = -1;
     let asSearchAnd = [];
     let asSearchOr = [];
-
-    //console.log("search body: ", req.body);
-    for (let i = 0; i < req.body.search.length; i++) {
-        let sFind = req.body.search[i];
+    console.log ('req.url: ', req.url);
+    let sSearch = req.url.split ('=')[1];
+    sSearch = decodeURIComponent (sSearch);
+    console.log ('sSearch: ', sSearch);
+    let asSearches = sSearch.split ('@');
+    console.log ('asSearches: ', asSearches);
+//    for (let i = 0; i < req.body.search.length; i++) {
+//        let sFind = req.body.search[i];
+    for (let i = 0; i < asSearches.length; i++) {
+        let sFind = asSearches[i];
         console.log("sFind: ", sFind);
         //    console.log ("sFind[0]: ", sFind[0]);
 

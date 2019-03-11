@@ -4,10 +4,10 @@
   "license": "MIT",
   "homepage": "/cnext",
   "scripts": {
-    "build": "npm run build:next && npm run build:server",
+    "build": "set NODE_ENV=production && npm run build:next && npm run build:server",
     "build:next": "next build",
     "build:server": "babel server -d compiled/server",
-    "start": "next start",
+    "start": "set NODE_ENV=production && node server/app.js",
     "dev": "nodemon server/app.js --watch server --exec babel-node",
     "now": "now && now alias",
     "rm": "now rm tutorial-3-end --safe --yes"

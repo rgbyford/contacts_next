@@ -1,7 +1,5 @@
 'use strict';
 
-var _database = require('./models/database');
-
 var express = require('express');
 var app = express();
 var socketServer = require('http').Server(app);
@@ -12,7 +10,9 @@ var routes = require("./routes/routes.js");
 var path = require("path");
 var serveStatic = require("serve-static");
 //import list from './list';
-
+// import {
+//   readCatsFile
+// } from './models/database';
 
 // var util = require('util');
 // var vCard = require('vcard');
@@ -23,8 +23,8 @@ var serveStatic = require("serve-static");
 // });
 
 var dev = process.env.NODE_ENV !== 'production';
-var port = process.env.PORT || 8000;
-var ROOT_URL = dev ? 'http://localhost:' + port : 'https://ssr-csr.builderbook.org';
+var port = process.env.PORT || 9000;
+var ROOT_URL = dev ? 'http://localhost:' + port : 'http://localhost:' + port;
 
 var nextApp = next({
   dev: dev
@@ -33,6 +33,7 @@ var nextHandler = nextApp.getRequestHandler();
 
 // Nextjs's app prepared
 nextApp.prepare().then(function () {
+  console.log("test");
   app.use(express.json());
   // app.use(function (req, res, next) {
   //   res.header("Access-Control-Allow-Origin", "*");
@@ -58,8 +59,8 @@ nextApp.prepare().then(function () {
   //   console.log(`> Ready on ${ROOT_URL}`); // eslint-disable-line no-console
   // });
 
-  socketServer.listen('8000', function () {
-    console.log('socket listening on port 8000');
+  socketServer.listen('9000', function () {
+    console.log('socket listening on port 9000');
   });
 
   //const app = require("../app.js");

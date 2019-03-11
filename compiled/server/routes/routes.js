@@ -127,13 +127,13 @@ router.post("/contacts", function () {
             while (1) {
                 switch (_context3.prev = _context3.next) {
                     case 0:
-                        console.log("post contacts");
+                        console.log("get contacts");
                         //    setPrevious();
                         //    iAnds = -1;
                         asSearchAnd = [];
                         asSearchOr = [];
 
-                        //console.log("search body: ", req.body);
+                        //    console.log("req: ", req);
 
                         for (i = 0; i < req.body.search.length; i++) {
                             sFind = req.body.search[i];
@@ -196,7 +196,8 @@ router.post("/contacts", function () {
                         // end for each asPrev.  Go around, 
 
                         //console.log("/contacts/search: ", asSearchAnd, asSearchOr);
-                        dbConn.queryDB(asSearchAnd, asSearchOr).then(function (aoFound) {
+                        _context3.next = 8;
+                        return dbConn.queryDB(asSearchAnd, asSearchOr).then(function (aoFound) {
                             // mongo returns an extra null element on the end of the array
                             // don't ask why howMany is done in such a weird way
                             // handlebars wasn't coping with an extra variable
@@ -233,11 +234,14 @@ router.post("/contacts", function () {
                             res.json({
                                 aoFound: aoFound
                             }); // and sends it
+                        }).catch(function (err) {
+                            console.log("queryDB error " + err);
                         });
 
+                    case 8:
                         return _context3.abrupt("return");
 
-                    case 8:
+                    case 9:
                     case "end":
                         return _context3.stop();
                 }

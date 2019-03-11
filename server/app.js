@@ -8,9 +8,9 @@ const routes = require("./routes/routes.js");
 const path = require("path");
 const serveStatic = require("serve-static");
 //import list from './list';
-import {
-  readCatsFile
-} from './models/database';
+// import {
+//   readCatsFile
+// } from './models/database';
 
 // var util = require('util');
 // var vCard = require('vcard');
@@ -21,8 +21,8 @@ import {
 // });
 
 const dev = process.env.NODE_ENV !== 'production';
-const port = process.env.PORT || 8000;
-const ROOT_URL = dev ? `http://localhost:${port}` : 'https://ssr-csr.builderbook.org';
+const port = process.env.PORT || 9000;
+const ROOT_URL = dev ? `http://localhost:${port}` : `http://localhost:${port}`;
 
 const nextApp = next({
   dev
@@ -32,6 +32,7 @@ const nextHandler = nextApp.getRequestHandler();
 
 // Nextjs's app prepared
 nextApp.prepare().then(() => {
+  console.log ("test");
   app.use(express.json());
   // app.use(function (req, res, next) {
   //   res.header("Access-Control-Allow-Origin", "*");
@@ -57,8 +58,8 @@ nextApp.prepare().then(() => {
   //   console.log(`> Ready on ${ROOT_URL}`); // eslint-disable-line no-console
   // });
 
-  socketServer.listen ('8000', () => {
-    console.log ('socket listening on port 8000');
+  socketServer.listen ('9000', () => {
+    console.log ('socket listening on port 9000');
   })
 
 
