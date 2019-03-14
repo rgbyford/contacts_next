@@ -48,11 +48,11 @@ class CSRWithData extends React.Component {
 
   nextButton (e) {
     if (asSearchStrings[iAnds] != "") {
-      asSearchStrings[iAnds] += " & ";
+      asSearchStrings[iAnds] += " _ ";
     }
     console.log ("next button: ", this.sCat);
     //iCatsSelected++;
-    asSearchStrings[iAnds] += this.sCat.join (' | ');
+    asSearchStrings[iAnds] += this.sCat.join (' OR ');
     console.log ("searchString: ", asSearchStrings[iAnds]);
     sSubCatOf = this.sCat[0];          // deal with the fact that this is an array
     iCatsSelected++;
@@ -82,7 +82,7 @@ class CSRWithData extends React.Component {
     asSearchStrings[iAnds] = "";
     sSubCatOf = "";
     this.setState ({sCat: []});
-    bCatSelected = false;
+    //bCatSelected = false;
   }
   
   csr(state) {
@@ -151,20 +151,26 @@ class CSRWithData extends React.Component {
     return (
     <div style={{ textAlign: 'center', margin: '0 20px' }}>
       <Head>
-        <title>Search page</title>
         <meta name="description" content="description for indexing bots" />
       </Head>
+      <style global jsx>{`
+      body {
+        background-image: url("/static/oriental.png");
+      }
+      `}</style>
       <br />
-      <p>Search page</p>
+      <h2>Search page</h2>
       {asSearchStrings.map((x, y) => <p key={y}>{y > 0 ? 'AND ': ""} {x}{'\u00A0'}</p>)}
-        <select multiple={bAllowMult ? true : false} onChange={(e) => this.catSelect(e)}>
+        <select size='10' multiple={bAllowMult ? true : false} onChange={(e) => this.catSelect(e)}>
         {aoCatsList.map((x, y) => <option key = {y}> {x.sThisCat} </option>)}
         </select>
       {this.sCat.length < 2 ? <button onClick={(e) => this.nextButton(e)}>Next</button> : ""}
       {this.sCat.length ? <button onClick={this.andButton}>AND</button> : ""}
       <button onClick={this.searchButton}>Search</button>
       <div>
-      {aoFoundPeople.map((x, y) => <div key={y}><p>{x.GivenName} {x.FamilyName}</p>
+      {aoFoundPeople.map((x, y) => <div key={y}>
+      <p>{x.GivenName} {x.FamilyName}
+      {x['Phone1-Value']}  {x['E-mail1-Value']}</p>
       <img style={{width: 100}} src={x.Photo1}/></div>)}
       </div>
     </div>

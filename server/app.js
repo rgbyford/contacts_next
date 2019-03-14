@@ -20,7 +20,8 @@ const serveStatic = require("serve-static");
 // 	console.log(util.inspect(json));
 // });
 
-const dev = process.env.NODE_ENV !== 'production';
+//const dev = process.env.NODE_ENV !== 'production';
+const dev = false;
 const port = process.env.PORT || 9000;
 const ROOT_URL = dev ? `http://localhost:${port}` : `http://localhost:${port}`;
 

@@ -44,23 +44,24 @@ router.put("/contacts/import", uploadMulter.single("avatar"), function () {
                         // });
                         // open a socket
                         //const io = socketIo();
+                        dbFunctions.writeDateFile();
 
                         bClearedDB = false;
                         //console.log("/contacts/import req body: ", req.body);
 
                         if (!(req.body.clearDB === 'true')) {
-                            _context.next = 5;
+                            _context.next = 6;
                             break;
                         }
 
-                        _context.next = 4;
+                        _context.next = 5;
                         return dbConn.clearDB();
 
-                    case 4:
+                    case 5:
                         bClearedDB = true;
                         // empty the database collection
 
-                    case 5:
+                    case 6:
                         if (req.body.clearCats === 'true') {
                             dbFunctions.deleteCatsFile();
                             // erase the categories file
@@ -74,7 +75,7 @@ router.put("/contacts/import", uploadMulter.single("avatar"), function () {
                             vcfFns.vcfJson(fname);
                         }
 
-                    case 9:
+                    case 10:
                     case "end":
                         return _context.stop();
                 }
@@ -119,13 +120,38 @@ router.get('/categories', function () {
     };
 }());
 
-router.post("/contacts", function () {
+router.get('/loadDate', function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee3(req, res) {
-        var asSearchAnd, asSearchOr, i, sFind, asFinds, _i, _i2;
-
+        var date;
         return _regenerator2.default.wrap(function _callee3$(_context3) {
             while (1) {
                 switch (_context3.prev = _context3.next) {
+                    case 0:
+                        console.log("get load date");
+                        date = dbFunctions.readDateFile();
+
+                        res.json(date);
+
+                    case 3:
+                    case "end":
+                        return _context3.stop();
+                }
+            }
+        }, _callee3, undefined);
+    }));
+
+    return function (_x6, _x7) {
+        return _ref3.apply(this, arguments);
+    };
+}());
+
+router.get("/contacts", function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee4(req, res) {
+        var asSearchAnd, asSearchOr, sSearch, asSearches, i, sFind, asFinds, _i, _i2;
+
+        return _regenerator2.default.wrap(function _callee4$(_context4) {
+            while (1) {
+                switch (_context4.prev = _context4.next) {
                     case 0:
                         console.log("get contacts");
                         //    setPrevious();
@@ -133,11 +159,20 @@ router.post("/contacts", function () {
                         asSearchAnd = [];
                         asSearchOr = [];
 
-                        //    console.log("req: ", req);
+                        console.log('req.url: ', req.url);
+                        sSearch = req.url.split('=')[1];
 
-                        for (i = 0; i < req.body.search.length; i++) {
-                            sFind = req.body.search[i];
+                        sSearch = decodeURIComponent(sSearch);
+                        console.log('sSearch: ', sSearch);
+                        asSearches = sSearch.split('@');
 
+                        console.log('asSearches: ', asSearches);
+                        //    for (let i = 0; i < req.body.search.length; i++) {
+                        //        let sFind = req.body.search[i];
+                        for (i = 0; i < asSearches.length; i++) {
+                            sFind = asSearches[i];
+
+                            sFind = sFind.replace(/\ OR\ /, '|');
                             console.log("sFind: ", sFind);
                             //    console.log ("sFind[0]: ", sFind[0]);
 
@@ -145,7 +180,7 @@ router.post("/contacts", function () {
                             //console.log("sFind: ", sFind);
                             sFind = sFind.trim();
                             //console.log(`sFind trimmed: *${sFind}*`);
-                            asFinds = sFind.split("&");
+                            asFinds = sFind.split("_");
                             //console.log(`asFinds: ${asFinds}`);
                             //console.log(`asFinds.length ${asFinds.length}`);
 
@@ -196,7 +231,7 @@ router.post("/contacts", function () {
                         // end for each asPrev.  Go around, 
 
                         //console.log("/contacts/search: ", asSearchAnd, asSearchOr);
-                        _context3.next = 8;
+                        _context4.next = 14;
                         return dbConn.queryDB(asSearchAnd, asSearchOr).then(function (aoFound) {
                             // mongo returns an extra null element on the end of the array
                             // don't ask why howMany is done in such a weird way
@@ -238,19 +273,19 @@ router.post("/contacts", function () {
                             console.log("queryDB error " + err);
                         });
 
-                    case 8:
-                        return _context3.abrupt("return");
+                    case 14:
+                        return _context4.abrupt("return");
 
-                    case 9:
+                    case 15:
                     case "end":
-                        return _context3.stop();
+                        return _context4.stop();
                 }
             }
-        }, _callee3, this);
+        }, _callee4, this);
     }));
 
-    return function (_x6, _x7) {
-        return _ref3.apply(this, arguments);
+    return function (_x8, _x9) {
+        return _ref4.apply(this, arguments);
     };
 }());
 

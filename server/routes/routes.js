@@ -28,6 +28,7 @@ router.put("/contacts/import", uploadMulter.single("avatar"), async function (re
     // });
     // open a socket
     //const io = socketIo();
+    dbFunctions.writeDateFile ();
 
     bClearedDB = false;
     //console.log("/contacts/import req body: ", req.body);
@@ -65,6 +66,12 @@ router.get('/categories', async (req, res) => {
     }
 });
 
+router.get ('/loadDate', async (req, res) => {
+    console.log ("get load date");
+    const date = dbFunctions.readDateFile();
+    res.json (date);
+});
+
 router.get("/contacts", async function (req, res) {
     console.log("get contacts");
     //    setPrevious();
@@ -81,6 +88,7 @@ router.get("/contacts", async function (req, res) {
 //        let sFind = req.body.search[i];
     for (let i = 0; i < asSearches.length; i++) {
         let sFind = asSearches[i];
+        sFind = sFind.replace (/\ OR\ /, '|');
         console.log("sFind: ", sFind);
         //    console.log ("sFind[0]: ", sFind[0]);
 
@@ -88,7 +96,7 @@ router.get("/contacts", async function (req, res) {
         //console.log("sFind: ", sFind);
         sFind = sFind.trim();
         //console.log(`sFind trimmed: *${sFind}*`);
-        let asFinds = sFind.split("&");
+        let asFinds = sFind.split("_");
         //console.log(`asFinds: ${asFinds}`);
         //console.log(`asFinds.length ${asFinds.length}`);
         if (asFinds.length > 1) { //['x y']

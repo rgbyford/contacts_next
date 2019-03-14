@@ -1,12 +1,11 @@
 import React from 'react';
 import Head from 'next/head';
 import PropTypes from 'prop-types';
-import { getList } from '../lib/api/public';
+//import { getList } from '../lib/api/public';
 import withLayout from '../lib/withLayout';
 import socketIOClient from 'socket.io-client';
-//import DataTable from 'react-data-table-component';
-import {Table} from 'reactable';
-//var Table = Reactable.Table;
+import {Table, Thead, Th, Tr,Td} from 'reactable';
+import { getLoadDate } from '../lib/api/public';
 
 let aoCats = [];
 let timerId;
@@ -17,11 +16,17 @@ module.exports.getCats = function () {
 
 class MyTable extends React.Component {
   render() {
-    return (<Table className = "table"
-      data = {
-        this.props.tableData
-      }
-      />
+    return (<Table className = "table">
+           <Thead>
+          <Th column="firstName">
+            <strong className="name-header">First Name</strong>
+          </Th>
+          <Th column="lastName">
+            <strong className="name-header">Last Name</strong>
+          </Th>
+        </Thead>
+        {this.props.tableData.map(x=><Tr> <Td column="firstName">{x.givenName}</Td> <Td column="lastName">{x.familyName}</Td></Tr>)}
+      </Table>
     );
   }
 }
@@ -31,6 +36,7 @@ class FileInput extends React.Component {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.fileInput = React.createRef();
+    this.timeCounter = 0;
     this.state = {
       timeCounter: 0,
       names: [],
@@ -38,7 +44,8 @@ class FileInput extends React.Component {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+ 
     const socket = socketIOClient();
     socket.on('news', (data) => {
       console.log ("something received: ", data);
@@ -77,7 +84,6 @@ class FileInput extends React.Component {
     timerId = setInterval(() => {
       // function called
       this.timeCounter++;
-      console.log ("tC: ", this.timeCounter);
       this.setState ({timeCounter: this.timeCounter});
     }, 1000);
 
@@ -102,10 +108,11 @@ class FileInput extends React.Component {
           <input style={{width: "100%"}} accept=".csv, .CSV, .vcf, .VCF" type="file" ref={this.fileInput} />
         </label>
         <br /><br />
-        <button type="submit">Submit</button>
+        <button type="submit"><strong>Submit</strong></button>
         <div>
         {this.state.response
-          ? <div><p>Loading done.</p><MyTable tableData={this.state.names} /></div>
+          ? <div><p>Loading done.
+            Near-duplicates:</p><MyTable tableData={this.state.names} /></div>
           : <p>Loading {this.state.timeCounter}</p>
         }</div>
       </form>
@@ -118,7 +125,8 @@ class LoadPage extends React.Component {
     super(props);
     this.state = {
       bClearCats: false,
-      bClearDB: false
+      bClearDB: false,
+      date: ''
     };
 
 //    this.handleClearDB = this.handleClearDB.bind(this);
@@ -138,6 +146,19 @@ class LoadPage extends React.Component {
   //   console.log ("clear cats");
   //   this.setState ({bClearCats: !bClearCats});
   // }
+  async componentDidMount () {
+   try {
+      console.log ("CDM before gLD call");
+      const date = await getLoadDate();
+      console.log("CDM:", date);
+      this.setState({ // eslint-disable-line
+        date: date
+      });
+      //bCatSelected = false;
+    } catch (err) {
+      this.setState({ loading: false, error: err.message || err.toString() }); // eslint-disable-line
+    }
+  }
 
   handleInputChange(event) {
     console.log ("Input change", event.target.name, event.target.type, event.target.checked);
@@ -152,24 +173,34 @@ class LoadPage extends React.Component {
 
   render() {
     const { list } = this.props;
+    let buttonStyle = {width: "16px", height: "16px"};
+
     return (
+      <strong>
       <div style={{  margin: '0 20px' }}>
         <Head>
           <title>Load</title>
           <meta name="description" content="description for indexing bots" />
         </Head>
+        <style global jsx>{`
+      body {
+        background-image: url("/static/oriental.png");
+      }
+      `}</style>
         <br /><br />
-        <h2 style={{ textAlign: 'left' }}>Load contacts</h2>
+        <h2 style={{ textAlign: 'left' }}>Load contacts (last loaded {this.state.date})</h2>
         <h4>CSV file to upload to database</h4>
         <form>
-         <label>Empty the database before loading:<input
+         <label>Empty the database before loading: <input
+            style={buttonStyle}
             name="bClearDB"
             type="checkbox"
             checked={this.state.bClearDB}
             onChange={this.handleInputChange} />
          </label>
          <br /><br />
-         <label>Rebuild the categories file:<input
+         <label>Rebuild the categories file: <input
+            style={buttonStyle}
             name="bClearCats"
             type="checkbox"
             checked={this.state.bClearCats}
@@ -179,6 +210,7 @@ class LoadPage extends React.Component {
         </form>
         <FileInput bClearDB={this.state.bClearDB} bClearCats={this.state.bClearCats} />
         </div>
+        </strong>
     );
   }
 }

@@ -3,7 +3,7 @@ import Grid from 'material-ui/Grid';
 import { styleToolbar } from './SharedStyles';
 
 const styleAnchor = {
-  margin: '0px 20px 0px auto',
+  margin: '50px 50px 10px auto'
 };
 
 function Header() {
@@ -11,7 +11,7 @@ function Header() {
     <div>
       <Toolbar style={styleToolbar}>
         <Grid container direction="row" justify="space-around" alignItems="center">
-          <Grid item sm={9} xs={8} style={{ textAlign: 'left' }}>
+          <Grid item sm={9} xs={8} style={{ paddingTop: '20px', textAlign: 'center' }}>
             <a href="/load" target="_self" style={styleAnchor}>
               Load
             </a>

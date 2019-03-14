@@ -38,6 +38,22 @@ function indexOfByKey(obj_list, key, value) {
     return -1;
 }
 
+module.exports.writeDateFile = function () {
+    var fdDate = fs.openSync('loaddate.txt', 'w');
+    var sDate = new Date();
+    console.log('sDate1: ', sDate);
+    sDate = sDate.toString().slice(4, 15);
+    console.log("sDate2:", sDate);
+    fs.writeFileSync(fdDate, sDate);
+    fs.closeSync(fdDate);
+};
+
+module.exports.readDateFile = function () {
+    var fdDate = fs.openSync('loaddate.txt', 'r');
+    var sDate = fs.readFileSync(fdDate, "utf8");
+    fs.closeSync(fdDate);
+    return sDate;
+};
 // functions for dealing with the categories
 
 function openCatsFile(mode) {

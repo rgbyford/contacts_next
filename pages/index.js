@@ -7,10 +7,15 @@ function Index() {
   return (
     <div style={{ padding: '10px 45px' }}>
       <Head>
-        <title>Index page</title>
-        <meta name="description" content="description for indexing bots" />
+        <title>Prodigium</title>
+        <meta name="description" content="" />
       </Head>
-      <p>Content on Index page</p>
+      <style global jsx>{`
+      body {
+        background-image: url("/static/oriental.png");
+      }
+      `}</style>
+      <h1>Prodigium Contact Search</h1>
     </div>
   );
 }

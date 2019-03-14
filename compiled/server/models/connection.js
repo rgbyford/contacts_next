@@ -181,6 +181,7 @@ module.exports.queryDB = function () {
                                                     GroupMembership: 1,
                                                     Photo1: 1,
                                                     'Phone1-Value': 1,
+                                                    'E-mail1-Value': 1,
                                                     imageURL: 1
                                                 });
                                                 //console.log ('queryDB cursor: ', cursor);
