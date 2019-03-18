@@ -76,6 +76,12 @@ module.exports.vcfJson = function (file) {
                 oContact['E-mail' + sEmail + '-Value'] = asSecond[0];
                 iEmails++;
                 break;
+            case 'X-FC-LIST-ID':
+                oContact['FC_ID1'] = asSecond[0];
+                break;
+            case 'X-ID':
+                oContact['FC_ID2'] = asSecond[0];
+                break;
             case 'PHOTO':
                 let sPhoto = iPhotos.toString();
                 oContact['Photo' + sPhoto + ''] = asSecond[0];

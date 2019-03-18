@@ -189,7 +189,6 @@ class LoadPage extends React.Component {
       `}</style>
         <br /><br />
         <h2 style={{ textAlign: 'left' }}>Load contacts (last loaded {this.state.date})</h2>
-        <h4>CSV file to upload to database</h4>
         <form>
          <label>Empty the database before loading: <input
             style={buttonStyle}

@@ -103,6 +103,7 @@ module.exports.deleteCatsFile = function () {
 module.exports.writeFile = function () {
     console.log("wCF: ", aoCatsRead.length);
     console.log("Bad tags: ", iBadOnes);
+    aoCatsRead.sort((a, b) => (a.sThisCat > b.sThisCat) ? 1 : (b.sThisCat > a.sThisCat) ? -1 : 0);
     writeCatsFile(aoCatsRead);
     iBadOnes = 0;
 };
@@ -187,7 +188,7 @@ function buildCategories(asTag) {
             //            }
             //            console.log ("iCatFound: ", iCatFound);
             if (iCatFound < 0) { // category doesn't exist - add it
-                //console.log("Found a new one", asCatSub[j]);
+//                console.log("Found a new one", asCatSub[j]);
                 aoCatsRead.push(new AoCats(sIsSubCatOf, asCatSub[j]));
             }
             sIsSubCatOf = asCatSub[j];

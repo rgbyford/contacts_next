@@ -216,19 +216,6 @@ router.get("/contacts", function () {
                             asSearchOr[_i2] = asSearchOr[_i2].replace(/\s/g, '');
                             console.log("asSO spaces removed: |" + asSearchOr[_i2] + "|");
                         }
-                        // replace , with OR 
-                        //        asPrev[index] = asPrev[index].replace(/\|/g, " | ");
-                        //        asPrev[index] = asPrev[index].replace(/,/g, " OR ");
-                        //    });
-                        // try splitting each sub-array by ','
-                        // search is <first element> AND <second element>
-                        // if split returns > 1, build an OR (pp AND (a OR c))
-                        // if split returns 1, just treat it "as is" (1 AND ace)
-                        // if "any" as the last sub-array, ignore it
-                        // so search string is "{$and [{$eq: array0}" + if there's an or ", $or[{$eq: subarray0}, {$eq: subarray1}, ...]]}"
-                        // otherwise ", {$eq: array1}, {$eq: array2}]}"
-                        // if last asPrev, add "} to search string.  Else add ", "
-                        // end for each asPrev.  Go around, 
 
                         //console.log("/contacts/search: ", asSearchAnd, asSearchOr);
                         _context4.next = 14;
