@@ -1,6 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
-import PropTypes from 'prop-types';
+//import PropTypes from 'prop-types';
 //import { getList } from '../lib/api/public';
 import withLayout from '../lib/withLayout';
 import socketIOClient from 'socket.io-client';
@@ -180,7 +180,7 @@ class LoadPage extends React.Component {
       <div style={{  margin: '0 20px' }}>
         <Head>
           <title>Load</title>
-          <meta name="description" content="description for indexing bots" />
+          <meta name="description" content="load database" />
         </Head>
         <style global jsx>{`
       body {

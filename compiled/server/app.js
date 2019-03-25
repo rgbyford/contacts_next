@@ -9,18 +9,6 @@ var next = require('next');
 var routes = require("./routes/routes.js");
 var path = require("path");
 var serveStatic = require("serve-static");
-//import list from './list';
-// import {
-//   readCatsFile
-// } from './models/database';
-
-// var util = require('util');
-// var vCard = require('vcard');
-// var card = new vCard();
-// /* Use readFile() if the file is on disk. */
-// card.readFile("test.vcf", function(err, json) {
-// 	console.log(util.inspect(json));
-// });
 
 //const dev = process.env.NODE_ENV !== 'production';
 var dev = false;
@@ -72,9 +60,6 @@ nextApp.prepare().then(function () {
 
 io.on('connection', function (socket) {
   console.log('a user connected');
-  // socket.emit('news', {
-  //     hello: 'world'
-  // });
   socket.on('my other event', function (data) {
     console.log("other event", data);
   });
@@ -86,49 +71,3 @@ module.exports.sendSomething = function (aoContacts) {
     something: JSON.stringify(aoContacts)
   });
 };
-
-//console.log("app get");
-//app.get('*', function (req, res) {
-//    console.log("contacts sendFile: ", path.join(__dirname, req.params[0]));
-//    res.sendFile(path.join(__dirname, req.params[0]));
-//    console.log("contacts sendFile done: ", path.join(__dirname, req.params[0]));
-//});
-
-
-// app.get('/api/v1/public/list', async (req, res) => {
-//   console.log("app get");
-//   try {
-//     console.log("/api/v1/public/list");
-//     const aoCats = readCatsFile();
-//     //      const listOfItems = await list();   // just builds the list
-//     //      res.json({ listOfItems });    // and sends it
-//     res.json({
-//       aoCats
-//     }); // and sends it
-//     // setTimeout(() => { res.json({ listOfItems }); }, 2000);
-//     //console.log(listOfItems);
-//   } catch (err) {
-//     res.json({
-//       error: err.message || err.toString()
-//     });
-//   }
-// });
-
-// app.post('/api/v1/public/contacts', async (req, res) => {
-//   console.log("get contacts");
-//   try {
-//     console.log("/api/v1/public/contacts");
-//     console.log(req.body);
-//     //      const aoCats = readCatsFile();
-//     //      const listOfItems = await list();   // just builds the list
-//     //      res.json({ listOfItems });    // and sends it
-//     //      res.json({ aoCats });    // and sends it
-//     // setTimeout(() => { res.json({ listOfItems }); }, 2000);
-//     //console.log(listOfItems);
-//   } catch (err) {
-//     console.log("get contacts error");
-//     res.json({
-//       error: err.message || err.toString()
-//     });
-//   }
-// });
