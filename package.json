@@ -22,7 +22,7 @@
     "multer": "^1.4.1",
     "next": "^5.1.0",
     "node-fetch": "^2.3.0",
-    "papaparse": "^4.6.3",
+    "papaparse": "^5.2.0",
     "prop-types": "^15.6.1",
     "react": "^16.2.0",
     "react-data-table-component": "^1.4.0",
